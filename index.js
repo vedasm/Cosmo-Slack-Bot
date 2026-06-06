@@ -43,17 +43,6 @@ ${response.data.punchline}`
   }
 });
 
-app.command("/csb-help", async ({ ack, respond }) => {
-  await ack();
-  await respond({
-    text:
-`Available Commands:
-/csb-ping - Check bot latency
-/csb-catfact - Get a cat fact
-/csb-joke - Tell u a Joke! `
-  });
-});
-
 app.command("/csb-apod", async ({ ack, respond }) => {
   await ack();
 
@@ -108,6 +97,19 @@ app.command("/csb-apod", async ({ ack, respond }) => {
       text: "❌ Failed to fetch NASA Astronomy Picture of the Day."
     });
   }
+});
+
+
+app.command("/csb-help", async ({ ack, respond }) => {
+  await ack();
+  await respond({
+    text:
+`Available Commands:
+/csb-ping - Check bot latency
+/csb-catfact - Get a cat fact
+/csb-joke - Tell u a Joke!
+/csb-apod - Gives NASA Astronomy Picture of the Day`
+  });
 });
 
 (async () => {
