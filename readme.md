@@ -118,8 +118,3 @@ cosmo-slack-bot/
 | `SLACK_APP_TOKEN` | App-Level Token for Socket Mode (starts with `xapp-`) |
 | `NASA_API_KEY` | NASA Open APIs key ([get one free](https://api.nasa.gov/)) |
 
----
-
-## 📜 License
-
-ISC
