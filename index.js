@@ -50,7 +50,7 @@ app.command("/csb-help", async ({ ack, respond }) => {
 `Available Commands:
 /csb-ping - Check bot latency
 /csb-catfact - Get a cat fact
-/csb-joke - Tell u a Joke!`
+/csb-joke - Tell u a Joke! `
   });
 });
 
