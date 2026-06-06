@@ -54,6 +54,62 @@ app.command("/csb-help", async ({ ack, respond }) => {
   });
 });
 
+app.command("/csb-apod", async ({ ack, respond }) => {
+  await ack();
+
+  try {
+    const { data: apod } = await axios.get(
+      "https://api.nasa.gov/planetary/apod",
+      {
+        params: {
+          api_key: process.env.NASA_API_KEY
+        },
+        timeout: 10000
+      }
+    );
+
+    if (apod.media_type === "image") {
+      await respond({
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `*🌌 NASA Astronomy Picture of the Day*\n*${apod.title}*\n\n${apod.explanation}`
+            }
+          },
+          {
+            type: "image",
+            image_url: apod.hdurl || apod.url,
+            alt_text: apod.title
+          }
+        ]
+      });
+    } else {
+      await respond({
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `*🎥 NASA APOD*\n*${apod.title}*\n${apod.explanation}\n\n${apod.url}`
+            }
+          }
+        ]
+      });
+    }
+  } catch (error) {
+    console.error(
+      "NASA APOD Error:",
+      error.response?.data || error.message
+    );
+
+    await respond({
+      text: "❌ Failed to fetch NASA Astronomy Picture of the Day."
+    });
+  }
+});
+
 (async () => {
   await app.start();
   console.log("bot is running!");
