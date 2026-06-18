@@ -146,6 +146,55 @@ app.command("/csb-iss", async ({ ack, respond }) => {
   }
 });
 
+app.command("/csb-orbit", async ({ ack, respond }) => {
+  await ack();
+
+  try {
+    const response = await axios.get('http://api.open-notify.org/astros.json');
+    const totalHumans = response.data.number;
+    const peopleInSpace = response.data.people;
+    const astronautList = peopleInSpace.map(person => {
+      return `🚀 **${person.name}** aboard the *${person.craft}*`;
+    }).join('\n');
+    await respond({
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `👨‍🚀👩‍🚀 **Live Orbit Report**\n\nThere are currently **${totalHumans}** human beings orbiting Earth right now!`
+          }
+        },
+        {
+          type: "divider"
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: astronautList || "Wait, according to the tracking radar, nobody is up there right now... that's weird."
+          }
+        },
+        {
+          type: "context",
+          elements: [
+            {
+              type: "mrkdwn",
+              text: `📊 Data pulled live from Open-Notify | Current Time: ${new Date().toUTCString()}`
+            }
+          ]
+        }
+      ]
+    });
+
+  } catch (error) {
+    console.error("Error fetching space orbit data:", error);
+    await respond({
+      text: "❌ The space radar communication link is down. I couldn't scan Earth's orbit. Try again in a bit!"
+    });
+  }
+});
+
 app.command("/csb-help", async ({ ack, respond }) => {
   await ack();
   await respond({
