@@ -55,20 +55,18 @@ app.command("/csb-apod", async ({ ack, respond }) => {
         params: {
           api_key: process.env.NASA_API_KEY
         },
-        timeout: 10000,
-        httpsAgent: freshAgent
+        timeout: 10000
       }
     );
 
     if (apod.media_type === "image") {
-      const text = `*🌌 NASA Astronomy Picture of the Day*\n*${apod.title}*\n\n${apod.explanation}`.slice(0, 2900);
       await respond({
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text
+              text: `*🌌 NASA Astronomy Picture of the Day*\n*${apod.title}*\n\n${apod.explanation}`
             }
           },
           {
@@ -79,14 +77,13 @@ app.command("/csb-apod", async ({ ack, respond }) => {
         ]
       });
     } else {
-      const text = `*🎥 NASA APOD*\n*${apod.title}*\n${apod.explanation}\n\n${apod.url}`.slice(0, 2900);
       await respond({
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text
+              text: `*🎥 NASA APOD*\n*${apod.title}*\n${apod.explanation}\n\n${apod.url}`
             }
           }
         ]
