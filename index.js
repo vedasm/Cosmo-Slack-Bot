@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const { App } = require("@slack/bolt");
 const axios = require("axios");
+const https = require("https");
+const freshAgent = new https.Agent({ keepAlive: false });
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -53,7 +55,8 @@ app.command("/csb-apod", async ({ ack, respond }) => {
         params: {
           api_key: process.env.NASA_API_KEY
         },
-        timeout: 10000
+        timeout: 10000,
+        httpsAgent: freshAgent
       }
     );
 
