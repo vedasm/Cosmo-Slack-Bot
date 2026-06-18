@@ -161,7 +161,10 @@ app.command("/csb-help", async ({ ack, respond }) => {
 /csb-ping - Check bot latency
 /csb-catfact - Get a cat fact
 /csb-joke - Tell u a Joke!
-/csb-apod - Gives NASA Astronomy Picture of the Day`
+/csb-apod - Gives NASA Astronomy Picture of the Day
+/csb-orbit - See how many humans are currently orbiting Earth
+/csb-help - Show this help message
+*Cosmo Slack Bot* | Developed by Veda`
   });
 });
 
