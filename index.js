@@ -100,21 +100,23 @@ app.command("/csb-apod", async ({ ack, respond }) => {
 });
 
 app.command("/csb-iss", async ({ ack, respond }) => {
+  // Acknowledge the command right away
   await ack();
 
   try {
+    // 1. Fetch live data from the ISS Open Notify API
     const response = await axios.get('http://api.open-notify.org/iss-now.json');
     const { latitude, longitude } = response.data.iss_position;
     const timestamp = new Date(response.data.timestamp * 1000).toUTCString();
-    const mapUrl = `https://image-charts.com/chart?chk=fe33833d74&chco=0000FF&chld=7|0000FF&chm=d,0000FF,0,-1,10&chp=0.05&chs=700x400&cht=map&chtg=world&chld=${latitude},${longitude}`;
-
+    const mapUrl = `https://static-maps.yandex.ru/1.x/?lang=en_US&ll=${longitude},${latitude}&z=3&l=sat&size=600,450&pt=${longitude},${latitude},pm2blm`;
+    
     await respond({
       blocks: [
         {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `🛰️ **International Space Station Locator**\n\nThe ISS is currently flying over our heads at these exact coordinates!`
+            text: `🛰️ **International Space Station Locator**\n\nThe ISS is currently flying over Earth at these exact coordinates!`
           }
         },
         {
@@ -134,10 +136,10 @@ app.command("/csb-iss", async ({ ack, respond }) => {
           type: "image",
           title: {
             type: "plain_text",
-            text: `Live ISS Location at ${timestamp}`
+            text: `Satellite view pinned at ${timestamp}`
           },
           image_url: mapUrl,
-          alt_text: "World map showing current location of the ISS"
+          alt_text: "Satellite view map showing the current location of the ISS"
         }
       ]
     });
@@ -145,7 +147,7 @@ app.command("/csb-iss", async ({ ack, respond }) => {
   } catch (error) {
     console.error("Error fetching ISS tracking data:", error);
     await respond({
-      text: "❌ Houston, we have a problem. I couldn't reach the ISS tracking radar right now. Try again in a minute!"
+      text: "❌ Houston, we have a problem. I couldn't connect to the ISS tracking radar right now. Try again in a second!"
     });
   }
 });
