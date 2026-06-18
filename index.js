@@ -100,36 +100,30 @@ app.command("/csb-apod", async ({ ack, respond }) => {
 });
 
 app.command("/csb-iss", async ({ ack, respond }) => {
-  // Acknowledge the command right away
   await ack();
 
   try {
-    // 1. Fetch live data from the ISS Open Notify API
     const response = await axios.get('http://api.open-notify.org/iss-now.json');
     const { latitude, longitude } = response.data.iss_position;
     const timestamp = new Date(response.data.timestamp * 1000).toUTCString();
-    const mapUrl = `https://static-maps.yandex.ru/1.x/?lang=en_US&ll=${longitude},${latitude}&z=3&l=sat&size=600,450&pt=${longitude},${latitude},pm2blm`;
-    
+
+    // OpenStreetMap-based static map, no API key required
+    const mapUrl = `https://staticmap.openstreetmap.de/staticmap.php?center=${latitude},${longitude}&zoom=3&size=600x450&markers=${latitude},${longitude},red-pushpin`;
+
     await respond({
       blocks: [
         {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `🛰️ **International Space Station Locator**\n\nThe ISS is currently flying over Earth at these exact coordinates!`
+            text: `🛰️ *International Space Station Locator*\n\nThe ISS is currently flying over Earth at these exact coordinates!`
           }
         },
         {
           type: "section",
           fields: [
-            {
-              type: "mrkdwn",
-              text: `🌐 **Latitude:** \`${latitude}\``
-            },
-            {
-              type: "mrkdwn",
-              text: `🌐 **Longitude:** \`${longitude}\``
-            }
+            { type: "mrkdwn", text: `🌐 *Latitude:* \`${latitude}\`` },
+            { type: "mrkdwn", text: `🌐 *Longitude:* \`${longitude}\`` }
           ]
         },
         {
@@ -139,7 +133,7 @@ app.command("/csb-iss", async ({ ack, respond }) => {
             text: `Satellite view pinned at ${timestamp}`
           },
           image_url: mapUrl,
-          alt_text: "Satellite view map showing the current location of the ISS"
+          alt_text: "Map showing the current location of the ISS"
         }
       ]
     });
