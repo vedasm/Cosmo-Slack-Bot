@@ -3,7 +3,9 @@ require("dotenv").config();
 const { App } = require("@slack/bolt");
 const axios = require("axios");
 const https = require("https");
-const freshAgent = new https.Agent({ keepAlive: false });
+const http = require("http");
+const httpsAgent = new https.Agent({ keepAlive: false });
+const httpAgent = new http.Agent({ keepAlive: false });
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -55,7 +57,8 @@ app.command("/csb-apod", async ({ ack, respond }) => {
         params: {
           api_key: process.env.NASA_API_KEY
         },
-        timeout: 10000
+        timeout: 10000,
+        httpsAgent
       }
     );
 
@@ -105,7 +108,7 @@ app.command("/csb-orbit", async ({ ack, respond }) => {
   await ack();
 
   try {
-    const response = await axios.get('http://api.open-notify.org/astros.json', { timeout: 8000 });
+    const response = await axios.get('http://api.open-notify.org/astros.json', { timeout: 8000, httpAgent });
     const totalHumans = response.data.number;
     const peopleInSpace = response.data.people;
     const astronautList = peopleInSpace.map(person => {
