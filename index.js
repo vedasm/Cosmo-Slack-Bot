@@ -58,13 +58,14 @@ app.command("/csb-apod", async ({ ack, respond }) => {
     );
 
     if (apod.media_type === "image") {
+      const text = `*🌌 NASA Astronomy Picture of the Day*\n*${apod.title}*\n\n${apod.explanation}`.slice(0, 2900);
       await respond({
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*🌌 NASA Astronomy Picture of the Day*\n*${apod.title}*\n\n${apod.explanation}`
+              text
             }
           },
           {
@@ -75,13 +76,14 @@ app.command("/csb-apod", async ({ ack, respond }) => {
         ]
       });
     } else {
+      const text = `*🎥 NASA APOD*\n*${apod.title}*\n${apod.explanation}\n\n${apod.url}`.slice(0, 2900);
       await respond({
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*🎥 NASA APOD*\n*${apod.title}*\n${apod.explanation}\n\n${apod.url}`
+              text
             }
           }
         ]
@@ -107,15 +109,18 @@ app.command("/csb-orbit", async ({ ack, respond }) => {
     const totalHumans = response.data.number;
     const peopleInSpace = response.data.people;
     const astronautList = peopleInSpace.map(person => {
-      return `🚀 **${person.name}** aboard the *${person.craft}*`;
+      return `🚀 *${person.name}* aboard the *${person.craft}*`;
     }).join('\n');
+
+    const astronautText = (astronautList || "Wait, according to the tracking radar, nobody is up there right now... that's weird.").slice(0, 2900);
+
     await respond({
       blocks: [
         {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `👨‍🚀👩‍🚀 **Live Orbit Report**\n\nThere are currently **${totalHumans}** human beings orbiting Earth right now!`
+            text: `👨‍🚀👩‍🚀 *Live Orbit Report*\n\nThere are currently *${totalHumans}* human beings orbiting Earth right now!`
           }
         },
         {
@@ -125,7 +130,7 @@ app.command("/csb-orbit", async ({ ack, respond }) => {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: astronautList || "Wait, according to the tracking radar, nobody is up there right now... that's weird."
+            text: astronautText
           }
         },
         {
