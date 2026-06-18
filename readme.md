@@ -1,30 +1,36 @@
-# 🤖 Cosmo Slack Bot
+# Cosmo Slack Bot
 
-A fun, lightweight Slack bot built with the [Slack Bolt SDK](https://slack.dev/bolt-js/) for Node.js. Cosmo brings cat facts, jokes, NASA's Astronomy Picture of the Day, and more right into your Slack workspace via slash commands.
+Cosmo is a small Slack bot that I created with js and the Slack Bolt SDK. I was looking for a method to share awesome space-related photos, quick facts, and even some silly jokes inside my Slack team through custom slash commands. It's always on and hosted by Nest so that it never loses connection!
 
----
+--- 
 
-## ✨ Features
+## How I Made It & What I Learned
+- Getting data from external APIs might seem as a straightforward task until you actually try to do it. The biggest challenge for me was the NASA Astronomy Picture of the Day (/csb-apod) command. I was constantly hitting API errors whenever I tried to get their response. It took me quite some time to figure out how to manually navigate their messy JSON structure, extract the specific image URL, title, and description, and finally give them into my JavaScript file and sent them as beautiful response.
+- It was hard for me that if a bunch of people use the NASA command, the reply takes ages to come up or it ends up giving a failure error. To solve this out, I forced a wait/timeout of 10 secs manually in the script, so that the payload can load properly before it send it to the channel.
+- Making the media inside a Slack channel looking neat is not even an easy task. I had to go through lot of trial and error before I found out how to compose a beautiful media card layout with Slack's Block Kit layout builder (it was such a big win to see that Pluto image at last come up perfectly! ).
+
+## Commands
 
 | Command | Description |
 |---|---|
-| `/csb-ping` | Check bot latency (Pong!) |
-| `/csb-catfact` | Get a random cat fact 🐱 |
-| `/csb-joke` | Hear a random joke 😄 |
-| `/csb-apod` | NASA Astronomy Picture of the Day 🌌 |
-| `/csb-help` | List all available commands |
+| `/csb-ping` | Just a simple latency check to make sure the bot is responsive and hasn't crashed. |
+| `/csb-catfact` | Instantly fetches a random cat fact because every Slack workspace needs animal trivia. |
+| `/csb-joke` | Instantly drops a funny joke right into the channel to brighten up the workspace. |
+| `/csb-apod` | Pings NASA's open API to pull the Astronomy Picture of the Day along with its official description. |
+| `/csb-help` | List all available commands and helps you when you forget a command |
 
----
+## 📸 Screenshots
 
-## 🛠️ Tech Stack
-
-- **Runtime**: Node.js (≥ 18)
-- **Framework**: [@slack/bolt](https://www.npmjs.com/package/@slack/bolt) v4
-- **HTTP Client**: [axios](https://www.npmjs.com/package/axios)
-- **Config**: [dotenv](https://www.npmjs.com/package/dotenv)
-- **Connection**: Socket Mode (no public URL needed)
-
----
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/dafc336e-d520-4f49-a30d-5bdaf7c87a33" width="400" alt="Bot command embed" /></td>
+    <td><img src="https://github.com/user-attachments/assets/1c023005-911a-4278-b5da-5617421705b3" width="400" alt="Bot response" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/83827a72-2645-4062-99f9-0a30dd4bfc15" width="400" alt="Command list" /></td>
+    <td><img src="https://github.com/user-attachments/assets/9d57b080-ef82-4f9d-939f-2a4d9d9a29c4" width="400" alt="Ping and cat fact" /></td>
+  </tr>
+</table>
 
 ## 🚀 Getting Started
 
@@ -98,7 +104,6 @@ cosmo-slack-bot/
 └── .gitignore
 ```
 
----
 
 ## 🔌 External APIs Used
 
@@ -108,7 +113,7 @@ cosmo-slack-bot/
 | Official Joke API | `https://official-joke-api.appspot.com/random_joke` | [GitHub](https://github.com/15Dkatz/official_joke_api) |
 | NASA APOD | `https://api.nasa.gov/planetary/apod` | [api.nasa.gov](https://api.nasa.gov/) |
 
----
+
 
 ## 🔐 Environment Variables
 
