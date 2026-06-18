@@ -105,7 +105,7 @@ app.command("/csb-orbit", async ({ ack, respond }) => {
   await ack();
 
   try {
-    const response = await axios.get('http://api.open-notify.org/astros.json');
+    const response = await axios.get('http://api.open-notify.org/astros.json', { timeout: 8000 });
     const totalHumans = response.data.number;
     const peopleInSpace = response.data.people;
     const astronautList = peopleInSpace.map(person => {
