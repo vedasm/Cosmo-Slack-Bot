@@ -99,6 +99,57 @@ app.command("/csb-apod", async ({ ack, respond }) => {
   }
 });
 
+app.command("/csb-iss", async ({ ack, respond }) => {
+  await ack();
+
+  try {
+    const response = await axios.get('http://api.open-notify.org/iss-now.json');
+    const { latitude, longitude } = response.data.iss_position;
+    const timestamp = new Date(response.data.timestamp * 1000).toUTCString();
+    const mapUrl = `https://image-charts.com/chart?chk=fe33833d74&chco=0000FF&chld=7|0000FF&chm=d,0000FF,0,-1,10&chp=0.05&chs=700x400&cht=map&chtg=world&chld=${latitude},${longitude}`;
+
+    await respond({
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `🛰️ **International Space Station Locator**\n\nThe ISS is currently flying over our heads at these exact coordinates!`
+          }
+        },
+        {
+          type: "section",
+          fields: [
+            {
+              type: "mrkdwn",
+              text: `🌐 **Latitude:** \`${latitude}\``
+            },
+            {
+              type: "mrkdwn",
+              text: `🌐 **Longitude:** \`${longitude}\``
+            }
+          ]
+        },
+        {
+          type: "image",
+          title: {
+            type: "plain_text",
+            text: `Live ISS Location at ${timestamp}`
+          },
+          image_url: mapUrl,
+          alt_text: "World map showing current location of the ISS"
+        }
+      ]
+    });
+
+  } catch (error) {
+    console.error("Error fetching ISS tracking data:", error);
+    await respond({
+      text: "❌ Houston, we have a problem. I couldn't reach the ISS tracking radar right now. Try again in a minute!"
+    });
+  }
+});
+
 app.command("/csb-help", async ({ ack, respond }) => {
   await ack();
   await respond({
