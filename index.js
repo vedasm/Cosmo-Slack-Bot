@@ -99,53 +99,6 @@ app.command("/csb-apod", async ({ ack, respond }) => {
   }
 });
 
-app.command("/csb-iss", async ({ ack, respond }) => {
-  await ack();
-
-  try {
-    const response = await axios.get('http://api.open-notify.org/iss-now.json');
-    const { latitude, longitude } = response.data.iss_position;
-    const timestamp = new Date(response.data.timestamp * 1000).toUTCString();
-
-    // OpenStreetMap-based static map, no API key required
-    const mapUrl = `https://staticmap.openstreetmap.de/staticmap.php?center=${latitude},${longitude}&zoom=3&size=600x450&markers=${latitude},${longitude},red-pushpin`;
-
-    await respond({
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `🛰️ *International Space Station Locator*\n\nThe ISS is currently flying over Earth at these exact coordinates!`
-          }
-        },
-        {
-          type: "section",
-          fields: [
-            { type: "mrkdwn", text: `🌐 *Latitude:* \`${latitude}\`` },
-            { type: "mrkdwn", text: `🌐 *Longitude:* \`${longitude}\`` }
-          ]
-        },
-        {
-          type: "image",
-          title: {
-            type: "plain_text",
-            text: `Satellite view pinned at ${timestamp}`
-          },
-          image_url: mapUrl,
-          alt_text: "Map showing the current location of the ISS"
-        }
-      ]
-    });
-
-  } catch (error) {
-    console.error("Error fetching ISS tracking data:", error);
-    await respond({
-      text: "❌ Houston, we have a problem. I couldn't connect to the ISS tracking radar right now. Try again in a second!"
-    });
-  }
-});
-
 app.command("/csb-orbit", async ({ ack, respond }) => {
   await ack();
 
