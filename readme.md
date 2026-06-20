@@ -62,6 +62,7 @@ npm install
    - `/csb-catfact`
    - `/csb-joke`
    - `/csb-apod`
+   - `/csb-orbit`
    - `/csb-help`
 5. Install the app to your workspace and copy the **Bot User OAuth Token**.
 
