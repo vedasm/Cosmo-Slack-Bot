@@ -18,6 +18,7 @@ Cosmo is a small Slack bot that I created with js and the Slack Bolt SDK. I was 
 | `/csb-joke` | Instantly drops a funny joke right into the channel to brighten up the workspace. |
 | `/csb-apod` | Pings NASA's open API to pull the Astronomy Picture of the Day along with its official description. |
 | `/csb-help` | List all available commands and helps you when you forget a command |
+| `/csb-orbit` | Gives the name of the person's orbiting around the Earth. |
 
 ## 📸 Screenshots
 
