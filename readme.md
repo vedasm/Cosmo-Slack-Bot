@@ -16,7 +16,7 @@ Cosmo is a small Slack bot that I created with js and the Slack Bolt SDK. I was 
 | `/csb-ping` | Just a simple latency check to make sure the bot is responsive and hasn't crashed. |
 | `/csb-catfact` | Instantly fetches a random cat fact because every Slack workspace needs animal trivia. |
 | `/csb-joke` | Instantly drops a funny joke right into the channel to brighten up the workspace. |
-| `/csb-apod` | Pings NASA's open API to pull the Astronomy Picture of the Day along with its official description. |
+| `/csb-apod` | Displays NASA's Astronomy Picture of the Day from a locally cached copy that automatically refreshes every 12 hours for faster and more reliable responses. |
 | `/csb-help` | List all available commands and helps you when you forget a command |
 | `/csb-orbit` | Gives the name of the person's orbiting around the Earth. |
 
@@ -113,7 +113,13 @@ cosmo-slack-bot/
 | Official Joke API | `https://official-joke-api.appspot.com/random_joke` | [GitHub](https://github.com/15Dkatz/official_joke_api) |
 | NASA APOD | `https://api.nasa.gov/planetary/apod` | [api.nasa.gov](https://api.nasa.gov/) |
 
+## ⚡ Performance Optimizations
 
+- Implemented local caching for the NASA Astronomy Picture of the Day (APOD).
+- Cached data is automatically refreshed every 12 hours.
+- `/csb-apod` serves cached content instead of requesting the NASA API on every command.
+- Reduces API usage and response time.
+- Provides a fallback experience if the NASA API is temporarily unavailable.
 
 ## 🔐 Environment Variables
 
