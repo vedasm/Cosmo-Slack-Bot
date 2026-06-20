@@ -6,6 +6,40 @@ const https = require("https");
 const http = require("http");
 const httpsAgent = new https.Agent({ keepAlive: false });
 const httpAgent = new http.Agent({ keepAlive: false });
+const fs = require("fs");
+const path = require("path");
+const cron = require("node-cron");
+const APOD_CACHE = path.join(__dirname, "cache", "apod.json");
+
+async function updateAPODCache() {
+  try {
+    console.log("Updating NASA APOD Cache...");
+
+    const { data } = await axios.get(
+      "https://api.nasa.gov/planetary/apod",
+      {
+        params: {
+          api_key: process.env.NASA_API_KEY
+        },
+        timeout: 10000,
+        httpsAgent
+      }
+    );
+
+    if (!fs.existsSync(path.dirname(APOD_CACHE))) {
+      fs.mkdirSync(path.dirname(APOD_CACHE), { recursive: true });
+    }
+
+    fs.writeFileSync(
+      APOD_CACHE,
+      JSON.stringify(data, null, 2)
+    );
+
+    console.log("NASA APOD cache updated.");
+  } catch (err) {
+    console.error("NASA Cache Update Failed:", err.message);
+  }
+}
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -22,7 +56,6 @@ app.command("/csb-ping", async ({ command, ack, respond }) => {
 
 app.command("/csb-catfact", async ({ ack, respond }) => {
   await ack();
-
   try {
     const response = await axios.get("https://catfact.ninja/fact");
     await respond({ text: `Cat Fact:\n${response.data.fact}` });
@@ -49,19 +82,13 @@ ${response.data.punchline}`
 
 app.command("/csb-apod", async ({ ack, respond }) => {
   await ack();
-
   try {
-    const { data: apod } = await axios.get(
-      "https://api.nasa.gov/planetary/apod",
-      {
-        params: {
-          api_key: process.env.NASA_API_KEY
-        },
-        timeout: 10000,
-        httpsAgent
-      }
+    if (!fs.existsSync(APOD_CACHE)) {
+      await updateAPODCache();
+    }
+    const apod = JSON.parse(
+      fs.readFileSync(APOD_CACHE)
     );
-
     if (apod.media_type === "image") {
       await respond({
         blocks: [
@@ -69,7 +96,11 @@ app.command("/csb-apod", async ({ ack, respond }) => {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*🌌 NASA Astronomy Picture of the Day*\n*${apod.title}*\n\n${apod.explanation}`
+              text:
+`*🌌 NASA Astronomy Picture of the Day*
+*${apod.title}*
+
+${apod.explanation}`
             }
           },
           {
@@ -86,20 +117,20 @@ app.command("/csb-apod", async ({ ack, respond }) => {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*🎥 NASA APOD*\n*${apod.title}*\n${apod.explanation}\n\n${apod.url}`
+              text:
+`*🎥 NASA APOD*
+*${apod.title}*
+${apod.explanation}
+${apod.url}`
             }
           }
         ]
       });
     }
-  } catch (error) {
-    console.error(
-      "NASA APOD Error:",
-      error.response?.data || error.message
-    );
-
+  } catch (err) {
+    console.error(err);
     await respond({
-      text: "❌ Failed to fetch NASA Astronomy Picture of the Day."
+      text: "❌ Unable to load cached NASA APOD."
     });
   }
 });
@@ -172,6 +203,10 @@ app.command("/csb-help", async ({ ack, respond }) => {
 });
 
 (async () => {
+  await updateAPODCache();
+  cron.schedule("0 */12 * * *", async () => {
+    await updateAPODCache();
+  });
   await app.start();
-  console.log("bot is running!");
+  console.log("Bot is running!");
 })();
