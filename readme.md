@@ -96,9 +96,11 @@ bot is running!
 
 ```
 cosmo-slack-bot/
-├── index.js        # Main bot logic and command handlers
+├── cache/
+│   └── apod.json
+├── index.js
 ├── package.json
-├── .env            # Environment variables (not committed)
+├── .env
 └── .gitignore
 ```
 
