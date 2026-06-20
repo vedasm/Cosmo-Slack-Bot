@@ -18,19 +18,16 @@ Cosmo is a small Slack bot that I created with js and the Slack Bolt SDK. I was 
 | `/csb-joke` | Instantly drops a funny joke right into the channel to brighten up the workspace. |
 | `/csb-apod` | Pings NASA's open API to pull the Astronomy Picture of the Day along with its official description. |
 | `/csb-help` | List all available commands and helps you when you forget a command |
+| `/csb-orbit` | Gives the name of the person's orbiting around the Earth. |
 
 ## 📸 Screenshots
 
-<table>
-  <tr>
-    <td><img src="https://github.com/user-attachments/assets/dafc336e-d520-4f49-a30d-5bdaf7c87a33" width="400" alt="Bot command embed" /></td>
-    <td><img src="https://github.com/user-attachments/assets/1c023005-911a-4278-b5da-5617421705b3" width="400" alt="Bot response" /></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/user-attachments/assets/83827a72-2645-4062-99f9-0a30dd4bfc15" width="400" alt="Command list" /></td>
-    <td><img src="https://github.com/user-attachments/assets/9d57b080-ef82-4f9d-939f-2a4d9d9a29c4" width="400" alt="Ping and cat fact" /></td>
-  </tr>
-</table>
+<img src="https://github.com/user-attachments/assets/dafc336e-d520-4f49-a30d-5bdaf7c87a33" width="400" alt="Bot command embed" />
+<img src="https://github.com/user-attachments/assets/1c023005-911a-4278-b5da-5617421705b3" width="500" alt="Bot response" />
+<img src="https://github.com/user-attachments/assets/83827a72-2645-4062-99f9-0a30dd4bfc15" width="400" alt="Command list" />
+<img src="https://github.com/user-attachments/assets/9d57b080-ef82-4f9d-939f-2a4d9d9a29c4" width="600" alt="Ping and cat fact" />
+<img src="https://github.com/user-attachments/assets/2b3e4409-76ae-438d-9757-a4f3365ed8c5" width="400" alt="Bot command embed"/>
+
 
 ## 🚀 Getting Started
 
@@ -65,6 +62,7 @@ npm install
    - `/csb-catfact`
    - `/csb-joke`
    - `/csb-apod`
+   - `/csb-orbit`
    - `/csb-help`
 5. Install the app to your workspace and copy the **Bot User OAuth Token**.
 
